@@ -68,7 +68,10 @@ class MainActivity : AppCompatActivity() {
             )
 
         ) {
-            viewModel.pdf(this, "http://bibliotecadigital.ilce.edu.mx/Colecciones/ObrasClasicas/_docs/Corazon_Amicis.pdf") //poner URL de ejemplo PDF
+            viewModel.pdf(
+                this,
+                "https://www.ujaen.es/servicios/negapoyo/sites/servicio_negapoyo/files/uploads/Modelo%20Archivo%20en%20Formato%20Digital.pdf"
+            ) //poner URL de ejemplo PDF
         }
     }
 
@@ -156,7 +159,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun reload() {
+        recyclerView.post {
 
+            adapter.reload(fetchData(0, 10))
+        }
     }
 
     private fun loadMore() {
