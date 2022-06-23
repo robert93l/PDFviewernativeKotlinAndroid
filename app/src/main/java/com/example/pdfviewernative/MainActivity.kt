@@ -9,10 +9,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.widget.AbsListView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
@@ -44,6 +41,18 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.textViewProgress)
     }
 
+    private val buttonLeft: Button by lazy {
+        findViewById(R.id.buttonLeft)
+    }
+
+    private val buttonRight: Button by lazy {
+        findViewById(R.id.buttonRight)
+    }
+
+    private val textViewPage: TextView by lazy {
+        findViewById(R.id.textViewPage)
+    }
+
 
     private lateinit var adapter: PDFAdapter
 
@@ -57,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         initFlow()
         initList()
+        setListener()
 
         permissionManager.requestPermission(
             "Permission",
@@ -98,6 +108,8 @@ class MainActivity : AppCompatActivity() {
                             totalPDFBitmapList.clear()
                             totalPDFBitmapList.addAll(it.list)
 
+                            textViewPage.text = "${currentIndex + 1}/${totalPDFBitmapList.size}"
+
                             reload()
                         }
 
@@ -133,6 +145,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setListener() {
+
+        buttonLeft.setOnClickListener {
+
+            currentIndex -= 1
+            if (currentIndex < 0) {
+                currentIndex = 0
+            }
+
+            recyclerView.smoothScrollToPosition(currentIndex)
+
+            textViewPage.text = "${currentIndex + 1}/${totalPDFBitmapList.size}"
+        }
+
+        buttonRight.setOnClickListener {
+
+            currentIndex += 1
+            if (currentIndex > totalPDFBitmapList.size - 1) {
+                currentIndex = totalPDFBitmapList.size - 1
+            }
+
+            recyclerView.smoothScrollToPosition(currentIndex)
+
+            textViewPage.text = "${currentIndex + 1}/${totalPDFBitmapList.size}"
+
+        }
+    }
+
     private fun initList() {
         recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -151,6 +191,9 @@ class MainActivity : AppCompatActivity() {
 
                     currentIndex =
                         (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+                    //current   Page
+                    textViewPage.text = "${currentIndex + 1}/${totalPDFBitmapList.size}"
                 }
             }
         })

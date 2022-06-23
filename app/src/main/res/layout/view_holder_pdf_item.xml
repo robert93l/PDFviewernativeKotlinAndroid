@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:paddingVertical="20dp">
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
